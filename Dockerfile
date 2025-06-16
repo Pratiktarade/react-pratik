@@ -1,5 +1,4 @@
-# React app Dockerfile
-# Stage 1: Build React App
+# Stage 1: Build the React App
 FROM node:18 as build
 WORKDIR /app
 
@@ -7,11 +6,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy source code and build
+# Copy all files
 COPY . .
+
+# Build the React App
 RUN npm run build
 
-# Stage 2: Serve with Nginx
+# Stage 2: Serve using Nginx
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
@@ -20,4 +21,3 @@ EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
